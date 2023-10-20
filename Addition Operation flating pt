@@ -1,0 +1,79 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+// Define a simple structure to represent IEEE 754 format
+struct IEEE754Format {
+    int sign;
+    int exponent;
+    float mantissa;
+};
+
+// Function to convert a float to IEEE 754 format
+IEEE754Format convertToIEEE754(float num) {
+    IEEE754Format result;
+    result.sign = (num < 0) ? 1 : 0;
+    num = abs(num);
+    int diff;
+    int exp = 0;
+    float frac = frexp(num, &exp);
+    cout<<"frac:"<<frac<<endl;
+    cout<<"exp:"<<exp<<endl;
+    if(exp > 8){
+    diff = exp-8;
+    cout<<"dif:"<<diff<<endl;
+    exp = 8;
+    frac = frac* pow(2,diff);
+    cout<<"frac now:"<<frac<<endl;}
+    result.exponent = exp ;
+    result.mantissa = frac;
+    cout<<"num1 :"<<num<<endl<<"exponent:"<<result.exponent<<endl<<"mantissa:"<<result.mantissa<<endl<<"sign:"<<result.sign<<endl;
+    return result;
+}
+
+// Function to perform IEEE 754 addition
+float addIEEE754(float num1, float num2) {
+    // Convert to IEEE 754 format
+    IEEE754Format format1 = convertToIEEE754(num1);
+    IEEE754Format format2 = convertToIEEE754(num2);
+
+    // Align exponents
+    int expDiff = format1.exponent - format2.exponent;
+    if (expDiff > 0) {
+        format2.exponent += expDiff;
+        format2.mantissa /= pow(2, expDiff);
+    } else {
+        format1.exponent -= expDiff;
+        format1.mantissa /= pow(2, -expDiff);
+    }
+
+    // Perform integer addition on aligned mantissas
+    float resultMantissa = (format1.sign == format2.sign) ? (format1.mantissa + format2.mantissa) : (format1.mantissa - format2.mantissa);
+
+    // Normalize result
+    while (resultMantissa >= 2.0) {
+        resultMantissa /= 2.0;
+        format1.exponent++;
+    }
+
+    // Reconstruct the result
+    IEEE754Format result;
+    result.sign = format1.sign;
+    result.exponent = format1.exponent;
+    result.mantissa = resultMantissa;
+
+    // Convert back to float
+    return ldexp(result.mantissa, result.exponent) * ((result.sign == 0) ? 1 : -1);
+}
+
+int main() {
+    float num1 = 512.5;
+    float num2 = -3.25;
+
+    float result = addIEEE754(num1, num2);
+
+    cout << "Result of " << num1 << " + " << num2 << " = " << result << endl;
+
+    return 0;
+}
