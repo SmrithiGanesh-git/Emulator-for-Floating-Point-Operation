@@ -3,11 +3,12 @@
 
 using namespace std;
 
-// Define a simple structure to represent IEEE 754 format
+/* Define a simple structure to represent the IEEE 754 format - single precision (binary32)
+Representation = (-1^ sign) * mantissa * (2^ exponent) */
 struct IEEE754Format {
-    int sign;
-    int exponent;
-    float mantissa;
+    int sign;// 1 bit for sign
+    int exponent; // 8 bits for exponent
+    float mantissa; // 23 bits for the multipicant
 };
 
 // Function to convert a float to IEEE 754 format
