@@ -3,7 +3,7 @@
 
 using namespace std;
 
-/* Define a simple structure to represent the IEEE 754 format - single precision (binary32)
+/* structure to represent the IEEE 754 format - single precision (binary32)
 Representation = (-1^ sign) * mantissa * (2^ exponent) */
 struct IEEE754Format {
     int sign;// 1 bit for sign
