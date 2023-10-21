@@ -1,2 +1,4 @@
-Here I am trying to create an emulator to support an underlying processor that does not have the hardware support for floating point operation. This routine will be called everytime an opcode related to floating point
-addition or subtraction is encountered. The routine is written in C++ and here the focus has been to try to manipulate IEEE 754 floating point or single precision (32 bit).
+Here I am trying to create an emulator to support an underlying processor that does not have the hardware support for floating-point operation. This routine will be called everytime an opcode related to floating point
+addition or subtraction is encountered. The routine is written in C++ and here the focus has been to try to manipulate IEEE 754 floating point or single precision (32-bit).
+
+The current design will at least require floating point registers to store the result, this is the minimum hardware requirement.
